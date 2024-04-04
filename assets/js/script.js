@@ -11,6 +11,25 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
+
+    const taskCard = $("<div>").addClass("card w-75 task-card draggable my-3").attr("data-task-id", task.id);
+
+    const cardHeader = $("<div>").addClass("card-header h4").text(task.title);
+
+    const cardBody = $("<div>").addClass("card-body h4");
+
+    const cardDescription = $("<p>").addClass("card-text").text(task.description);
+
+    const cardDueDate = $("<p>").addClass("card-text").text(task.dueDate);
+
+    const cardDeleteButton = $("<button>").addClass("btn btn-danger delete").attr("data-task-id", task.id).text("Delete");
+
+    cardDeleteButton.on("click", handleDeleteTask());
+
+    if(task.dueDate && task.status === "to-do"){
+
+    }
+
 }
 
 // Todo: create a function to render the task list and make cards draggable
@@ -118,6 +137,12 @@ $("#taskDueDate").val("");
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
+
+const taskCaID = $(this).attr("nextID");
+
+const tasks = renderTaskList();
+
+
 
 }
 
