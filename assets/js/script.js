@@ -4,12 +4,12 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-
+    let task = localStorage.setItem("taskID", JSON.stringify(crypto.randomUUID()));
 }
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-
+    let taskID = JSON.parse(localStorage.getItem("taskID"));
 }
 
 // Todo: create a function to render the task list and make cards draggable
