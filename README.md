@@ -3,6 +3,7 @@
 Module 5 Challenge, an odd challeng, so starter code was provided but no function at all in the js, created the functions with the help of my instructor and his speedruns, it was a hard challenge not gonna lie, a lot of new stuff and still confuse about this JQUERY and bootstrap thing, but its working fine, you can add the tasks if its late, it will turn red, if its close to the date it will turn yellow as a warning and if you have time it will just be white, you can dragg between the columns and marks as done, if you click delet it will delete the task from your page.
 
 ## Installation
+https://erikrainer.github.io/projectManagerAPI/
 
 ![Task Board](https://github.com/Erikrainer/projectManagerAPI/assets/160955635/8e7ca3aa-9ff4-4c76-81aa-519d329a7853)
 
