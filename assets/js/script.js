@@ -102,7 +102,7 @@ function renderTaskList() {
 
         }
     }
-    $("draggable").draggable({
+    $(".draggable").draggable({
 
         opacity: 0.7,
 
@@ -181,18 +181,23 @@ renderTaskList();
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
+function handleDrop (event, ui) {
 
-    const taskID = ui.draggable.dataset.taskId;
+    const taskId = ui.draggable[0].dataset.taskId;
 
     const newStatus = event.target.id
 
     for(let i = 0; i < taskList.length; i++){
-        if(taskList[i].id == parseInt(taskID)){
+
+        if(taskList[i].id == parseInt(taskId)){
+
             taskList[i].status = newStatus;
+
         }
     }
+
     localStorage.setItem("tasks", JSON.stringify(taskList));
+
     renderTaskList();
 }
 
@@ -205,13 +210,13 @@ $(document).ready(function () {
 
     $(".task-list").on("click", ".delete", handleDeleteTask);
 
-    $(".lane").draggable({
+    $(".lane").droppable({
 
         accept: ".draggable",
 
         drop: handleDrop,
 
-    });
+    })
 
     $("#due-date").datepicker({
 
