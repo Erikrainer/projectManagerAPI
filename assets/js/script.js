@@ -5,8 +5,19 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
 
-    localStorage.setItem("nextID", JSON.stringify(crypto.randomUUID()));
+    if (!nextId){
 
+        nextId = 1;
+
+    }else {
+
+        nextId += 1;
+
+    }
+
+    localStorage.setItem("nextId", JSON.stringify(nextId));
+
+    return nextId;
 }
 
 // Todo: create a function to create a task card
@@ -22,26 +33,46 @@ function createTaskCard(task) {
 
     const cardDueDate = $("<p>").addClass("card-text").text(task.dueDate);
 
-    const cardDeleteButton = $("<button>").addClass("btn btn-danger delete").attr("data-task-id", task.id).text("Delete");
+    const cardDeleteButton = $("<button>").addClass("btn btn-danger delete").text("Delete").attr("data-task-id", task.id);
 
-    cardDeleteButton.on("click", handleDeleteTask());
+    cardDeleteButton.on("click", handleDeleteTask);
 
-    if(task.dueDate && task.status === "to-do"){
+    if(task.dueDate && task.status !== "done"){
 
+        const now = dayjs();
+
+        const taskDueDate = dayjs(task.dueDate, "DD/MM/YYYY");
+
+        if(now.isSame(taskDueDate, "day")) {
+
+            taskCard.addClass("bg-warning text-white");
+
+        }else if(now.isAfter(taskDueDate)){
+
+            taskCard.addClass("bg-danger text-white");
+
+            cardDeleteButton.addClass("border-light");
+        }
+        
     }
 
+    cardBody.append(cardDescription, cardDueDate, cardDeleteButton);
+    
+    taskCard.append(cardHeader, cardBody);
+
+    return taskCard;
 }
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
 
-    if(taskList === null){
+    if(!taskList){
 
         taskList = [];
 
-    }else{
+    }
 
-        const todoList = $("todo-cards");
+        const todoList = $("#todo-cards");
 
         todoList.empty();
 
@@ -69,16 +100,15 @@ function renderTaskList() {
 
                 doneList.append(createTaskCard(taskList[i]));
 
-            }
         }
     }
     $("draggable").draggable({
 
-        opacity: 1,
+        opacity: 0.7,
 
         zIndex: 100,
 
-        helper:function(event){
+        helper: function(event){
 
             let original;
 
@@ -111,9 +141,9 @@ const task = {
 
     id: generateTaskId(),
 
-    title: $("#taskTitle").val().trim(),
+    title: $("#taskTitle").val(),
 
-    description: $("#taskDescription").val().trim(),
+    description: $("#taskDescription").val(),
 
     dueDate: $("#taskDueDate").val(),
 
@@ -123,7 +153,7 @@ const task = {
 
 taskList.push(task);
 
-localStorage.setItem("tasks",JSON.stringify(taskList));
+localStorage.setItem("tasks", JSON.stringify(taskList));
 
 renderTaskList();
 
@@ -138,11 +168,15 @@ $("#taskDueDate").val("");
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
 
-const taskCaID = $(this).attr("nextID");
+event.preventDefault();
 
-const tasks = renderTaskList();
+const taskId = $(this).attr("data-task-id");
 
+taskList = taskList.filter(task => task.id !== parseInt(taskId));
 
+localStorage.setItem("tasks", JSON.stringify(taskList));
+
+renderTaskList();
 
 }
 
@@ -175,10 +209,16 @@ $(document).ready(function () {
 
         accept: ".draggable",
 
-        drop: handleDrop(),
+        drop: handleDrop,
 
     });
 
-    $("#due-date").datepicker();
+    $("#due-date").datepicker({
+
+        changeMonth: true,
+
+        changeYear: true,
+        
+    });
 
 });
